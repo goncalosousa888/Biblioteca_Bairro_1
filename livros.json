@@ -1,8 +1,8 @@
 [
   { "titulo": "Os Maias", "autor": "Eça de Queirós", "ano": 1888, "disponivel": true },
-  { "titulo": "Memorial do Convento", "autor": "José Saramago", "ano": 1982, "disponivel": false },
-  { "titulo": "Mensagem", "autor": "Fernando Pessoa", "ano": 1934, "disponivel": true },
-  { "titulo": "Livro do Desassossego", "autor": "Fernando Pessoa", "ano": 1982, "disponivel": true },
-  { "titulo": "Amor de Perdição", "autor": "Camilo Castelo Branco", "ano": 1862, "disponivel": false },
-  { "titulo": "A Cidade e as Serras", "autor": "Eça de Queirós", "ano": 1901, "disponivel": true }
+  { "titulo": "Mensagem", "autor": "Fernando Pessoa", "ano": 1934, "disponivel": false },
+  { "titulo": "A Sibila", "autor": "Agustina Bessa-Luís", "ano": 1954, "disponivel": true },
+  { "titulo": "Os Lusíadas", "autor": "Luís de Camões", "ano": 1572, "disponivel": true },
+  { "titulo": "Aparição", "autor": "Vergílio Ferreira", "ano": 1959, "disponivel": false },
+  { "titulo": "Memorial do Convento", "autor": "José Saramago", "ano": 1982, "disponivel": true }
 ]
