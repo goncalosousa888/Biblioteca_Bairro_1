@@ -324,6 +324,131 @@
     mostrar();
   }
 
+  // ═════════════════════════════════════════════════════════
+  // PASSOS DO ENUNCIADO (01, 02, 03…) · resultado na página E na consola (F12)
+  // ═════════════════════════════════════════════════════════
+  function criarPassos(n) {
+    const seccao = $(`#ex${n}`);
+    const lista = document.createElement("ul");
+    lista.className = "saida passos";
+    seccao.querySelector("h3").after(lista);
+
+    const titulo = document.createElement("h4");
+    titulo.textContent = "Experimenta tu";
+    lista.after(titulo);
+
+    return (rotulo, texto) => {
+      console.log(`[Exercício 0${n}] ${rotulo} · ${texto}`);
+      lista.append(criarLi(`${rotulo} · ${texto}`));
+    };
+  }
+
+  function passosEx1() {
+    const passo = criarPassos(1);
+    passo("01", 'app.js ligado à página com <script src="app.js" defer> ✓');
+    passo("02", "Bem-vindos à Biblioteca do Bairro!");
+    passo("03", `2026 - 1987 = ${2026 - 1987}`);
+    passo("04", "Comentário com o nome no topo do app.js ✓");
+    try {
+      console.lg("teste");                                   // 05 · erro de propósito
+    } catch (erro) {
+      const local = (erro.stack || "").match(/[\w.-]+\.js:\d+/);
+      passo("05", `${erro.name}: ${erro.message}${local ? ` (${local[0]})` : ""}`);
+    }
+  }
+
+  function passosEx2() {
+    const passo = criarPassos(2);
+    const nome = "Biblioteca do Bairro";
+    const morada = "Rua das Flores, 12";
+    let livros = 1250;
+    passo("01", `nome: ${nome} · morada: ${morada}`);
+    passo("02", `livros disponíveis: ${livros}`);
+    for (let i = 1; i <= 3; i++) {
+      livros = livros - 1;
+      passo("03", `${i}.º empréstimo → ${livros}`);
+    }
+    passo("04", `A ${nome} tem ${livros} livros disponíveis.`);
+    passo("05", `typeof: ${typeof nome}, ${typeof morada}, ${typeof livros} · ${nome.toUpperCase()}`);
+  }
+
+  function passosEx3() {
+    const passo = criarPassos(3);
+    passo("01–04", "Segunda a sexta 9h–19h · sábado 10h–13h · domingo fechada");
+    const combinacoes = [["quarta", 18], ["quarta", 19], ["sábado", 11], ["sábado", 14], ["domingo", 11]];
+    for (const [dia, hora] of combinacoes) {
+      passo("05", `dia = "${dia}", hora = ${hora} → ${estaAberta(dia, hora) ? "Aberta" : "Fechada"}`);
+    }
+  }
+
+  function passosEx4() {
+    const passo = criarPassos(4);
+    for (const dias of [10, 16, 30]) {
+      passo("01", `calcularMulta(${dias}) → ${calcularMulta(dias)}`);
+    }
+    for (const [dia, hora] of [["domingo", 11], ["sexta", 9], ["sábado", 13]]) {
+      passo("02", `estaAberta("${dia}", ${hora}) → ${estaAberta(dia, hora)}`);
+    }
+    for (const valor of [0, 3.5, 12.345]) {
+      passo("03", `formatarEuros(${valor}) → ${formatarEuros(valor)}`);
+    }
+    for (const dias of [10, 22, 30]) {
+      passo("04", `mensagemMulta(${dias}) → ${mensagemMulta(dias)}`);
+    }
+  }
+
+  function passosEx5() {
+    const passo = criarPassos(5);
+    const livros = ["Os Maias", "Mensagem", "A Sibila", "Os Lusíadas", "Aparição"];   // 01
+    livros.push("Memorial do Convento", "Ensaio sobre a Cegueira");                    // 02
+    passo("02", `${livros.length} livros na lista`);
+    livros.forEach((titulo, i) => passo("03", `${i + 1}. ${titulo}`));                 // 03
+    const longos = livros.filter(t => t.length > 10);                                  // 04
+    const maiusculas = livros.map(t => t.toUpperCase());                               // 05
+    passo("04", `filter, mais de 10 letras: ${longos.join(", ")}`);
+    passo("05", `map, maiúsculas: ${maiusculas.join(", ")}`);
+  }
+
+  function passosEx6() {
+    const passo = criarPassos(6);
+    const catalogo = [                                                                 // 01
+      { titulo: "Os Maias", autor: "Eça de Queirós", ano: 1888, disponivel: true },
+      { titulo: "Memorial do Convento", autor: "José Saramago", ano: 1982, disponivel: false },
+      { titulo: "Mensagem", autor: "Fernando Pessoa", ano: 1934, disponivel: true },
+      { titulo: "Livro do Desassossego", autor: "Fernando Pessoa", ano: 1982, disponivel: true },
+      { titulo: "Amor de Perdição", autor: "Camilo Castelo Branco", ano: 1862, disponivel: false },
+      { titulo: "A Cidade e as Serras", autor: "Eça de Queirós", ano: 1901, disponivel: true },
+    ];
+    for (const l of catalogo) {                                                        // 02
+      passo("02", `${l.titulo} — ${l.autor} (${l.ano})`);
+    }
+    passo("03", `Disponíveis: ${catalogo.filter(l => l.disponivel).length}`);          // 03
+    let antigo = catalogo[0];                                                          // 04
+    for (const l of catalogo) {
+      if (l.ano < antigo.ano) antigo = l;
+    }
+    passo("04", `Mais antigo: ${antigo.titulo} (${antigo.ano})`);
+
+    function emprestar(titulo) {                                                       // 05
+      const livro = catalogo.find(l => l.titulo === titulo);
+      if (!livro) return "Livro não encontrado.";
+      if (!livro.disponivel) return "Já está emprestado.";
+      livro.disponivel = false;
+      return "Emprestado!";
+    }
+    passo("05", `emprestar("Os Maias") → ${emprestar("Os Maias")}`);
+    passo("05", `emprestar("Os Maias") → ${emprestar("Os Maias")}`);
+    passo("05", `emprestar("Livro Inexistente") → ${emprestar("Livro Inexistente")}`);
+    passo("03", `Disponíveis agora: ${catalogo.filter(l => l.disponivel).length}`);
+  }
+
+  passosEx1();
+  passosEx2();
+  passosEx3();
+  passosEx4();
+  passosEx5();
+  passosEx6();
+
   iniciarEx1();
   iniciarEx2();
   iniciarEx3();
