@@ -119,3 +119,15 @@ form button { justify-self: start; margin-top: 0.5rem; }
 .exercicio h3 { margin: 0 0 0.5rem; color: var(--destaque); }
 .saida { margin: 0; padding-left: 1.25rem; font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 0.92rem; }
 .saida li { padding: 0.1rem 0; }
+
+/* Exercícios interativos */
+.controlos { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; margin: 0.6rem 0; }
+.controlos input[type="number"] { width: 6rem; }
+.controlos input[type="text"] { flex: 1; min-width: 12rem; }
+select { font: inherit; padding: 0.5rem 0.7rem; border: 1px solid var(--linha); border-radius: 0.5rem; background: var(--cartao); color: var(--texto); }
+.resultado { margin: 0.4rem 0; min-height: 1.5rem; font-weight: 500; }
+.resultado.ok { color: var(--sucesso); }
+.resultado.aviso { color: var(--erro); }
+.exercicio h4 { margin: 1rem 0 0.25rem; }
+.saida li.indisponivel { text-decoration: line-through; color: var(--apagado); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }

@@ -1,6 +1,6 @@
 # Biblioteca do Bairro · exercícios 1 a 9
 
-- `exercicios.html` + `exercicios.js` — exercícios 1 a 6, com os resultados na página e na consola (F12). Também corre com `node exercicios.js`.
+- `exercicios.html` + `exercicios.js` — exercícios 1 a 6, interativos (campos e botões na página).
 - `index.html`, `catalogo.html`, `estilos.css`, `app.js`, `livros.json` — exercícios 7, 8 e 9.
 
 ## Para ver o site

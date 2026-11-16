@@ -20,37 +20,102 @@
   </header>
 
   <main>
-    <h2>Resultados dos exercícios 1 a 6</h2>
-    <p class="nota">Os mesmos resultados aparecem na consola (F12). Os exercícios 7, 8 e 9 estão no <a href="catalogo.html">catálogo</a>.</p>
+    <h2>Exercícios 1 a 6, para experimentar</h2>
+    <p class="nota">Cada cartão é um exercício a funcionar. Os exercícios 7, 8 e 9 estão no <a href="catalogo.html">catálogo</a>.</p>
 
+    <!-- 01 · Olá, consola -->
     <section id="ex1" class="exercicio">
       <h3>01 · Olá, consola</h3>
-      <ul class="saida"></ul>
+      <div class="controlos">
+        <button id="ex1-saudar" type="button">Dizer olá</button>
+        <button id="ex1-erro" type="button">Provocar erro (console.lg)</button>
+      </div>
+      <p id="ex1-msg" class="resultado" role="status"></p>
+      <div class="controlos">
+        <label for="ex1-ano">Ano em que a biblioteca abriu</label>
+        <input id="ex1-ano" type="number" value="1987" min="1000" max="2100">
+      </div>
+      <p id="ex1-anos" class="resultado" role="status"></p>
     </section>
 
+    <!-- 02 · Os dados da biblioteca -->
     <section id="ex2" class="exercicio">
       <h3>02 · Os dados da biblioteca</h3>
-      <ul class="saida"></ul>
+      <p id="ex2-dados" class="resultado"></p>
+      <div class="controlos">
+        <button id="ex2-emprestar" type="button">Registar empréstimo</button>
+        <button id="ex2-repor" type="button">Repor 1250</button>
+      </div>
+      <p id="ex2-frase" class="resultado" role="status"></p>
+      <ul id="ex2-tipos" class="saida"></ul>
     </section>
 
+    <!-- 03 · Aberta ou fechada? -->
     <section id="ex3" class="exercicio">
       <h3>03 · Aberta ou fechada?</h3>
-      <ul class="saida"></ul>
+      <div class="controlos">
+        <label for="ex3-dia">Dia</label>
+        <select id="ex3-dia"></select>
+        <label for="ex3-hora">Hora</label>
+        <input id="ex3-hora" type="number" value="11" min="0" max="23">
+      </div>
+      <p id="ex3-resultado" class="resultado" role="status"></p>
     </section>
 
+    <!-- 04 · Funções da biblioteca -->
     <section id="ex4" class="exercicio">
       <h3>04 · Funções da biblioteca</h3>
-      <ul class="saida"></ul>
+
+      <div class="controlos">
+        <label for="ex4-dias">Dias com o livro</label>
+        <input id="ex4-dias" type="number" value="22" min="0">
+      </div>
+      <p id="ex4-multa" class="resultado" role="status"></p>
+
+      <div class="controlos">
+        <label for="ex4-valor">Valor em euros</label>
+        <input id="ex4-valor" type="number" value="3.5" min="0" step="0.01">
+      </div>
+      <p id="ex4-euros" class="resultado" role="status"></p>
+
+      <div class="controlos">
+        <label for="ex4-dia">Dia</label>
+        <select id="ex4-dia"></select>
+        <label for="ex4-hora">Hora</label>
+        <input id="ex4-hora" type="number" value="11" min="0" max="23">
+      </div>
+      <p id="ex4-aberta" class="resultado" role="status"></p>
     </section>
 
+    <!-- 05 · Lista de leituras -->
     <section id="ex5" class="exercicio">
       <h3>05 · Lista de leituras</h3>
-      <ul class="saida"></ul>
+      <form id="ex5-form" class="controlos">
+        <label for="ex5-titulo">Juntar um título</label>
+        <input id="ex5-titulo" type="text" placeholder="Ex.: Os Lusíadas">
+        <button type="submit">Juntar</button>
+      </form>
+      <p id="ex5-aviso" class="resultado" role="status"></p>
+      <p id="ex5-total" class="resultado"></p>
+      <ul id="ex5-lista" class="saida"></ul>
+      <h4>Títulos com mais de 10 letras</h4>
+      <ul id="ex5-longos" class="saida"></ul>
+      <h4>Em maiúsculas</h4>
+      <ul id="ex5-maiusculas" class="saida"></ul>
     </section>
 
+    <!-- 06 · O catálogo em objetos -->
     <section id="ex6" class="exercicio">
       <h3>06 · O catálogo em objetos</h3>
-      <ul class="saida"></ul>
+      <ul id="ex6-lista" class="saida"></ul>
+      <p id="ex6-contagem" class="resultado"></p>
+      <p id="ex6-antigo" class="resultado"></p>
+      <form id="ex6-form" class="controlos">
+        <label for="ex6-titulo">Emprestar um livro pelo título</label>
+        <input id="ex6-titulo" type="text" placeholder="Ex.: Os Maias">
+        <button type="submit">Emprestar</button>
+      </form>
+      <p id="ex6-aviso" class="resultado" role="status"></p>
     </section>
   </main>
 </body>
