@@ -1,12 +1,12 @@
-# Biblioteca do Bairro · exercícios 1 a 9
+# Biblioteca do Bairro
 
-- `exercicios.html` + `exercicios.js` — exercícios 1 a 6, interativos (campos e botões na página).
-- `index.html`, `catalogo.html`, `estilos.css`, `app.js`, `livros.json` — exercícios 7, 8 e 9.
+Páginas: `index.html`, `catalogo.html`, `eventos.html`, `sobre.html`, `contactos.html`.
+Ficheiros partilhados: `estilos.css`, `app.js`, `livros.json`.
 
 ## Para ver o site
-O `fetch` (exercício 9) não funciona a abrir o ficheiro com duplo clique (`file://`).
+O `fetch` não funciona a abrir o ficheiro com duplo clique (`file://`).
 Usa um servidor local, na pasta do projeto:
 
     python3 -m http.server 8000
 
-e abre http://localhost:8000/catalogo.html (ou usa a extensão Live Server do VS Code).
+e abre http://localhost:8000/ (ou usa a extensão Live Server do VS Code).
