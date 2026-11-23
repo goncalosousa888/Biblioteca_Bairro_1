@@ -132,3 +132,33 @@ select { font: inherit; padding: 0.5rem 0.7rem; border: 1px solid var(--linha); 
 .saida li.indisponivel { text-decoration: line-through; color: var(--apagado); }
 button:disabled { opacity: 0.5; cursor: not-allowed; }
 .passos { margin-bottom: 0.5rem; }
+
+/* ── Páginas Eventos, Sobre e Contactos ─────────────────────────────── */
+main a, footer a { color: var(--destaque); }
+.logo { font-size: 1.4rem; font-weight: 700; color: var(--destaque); text-decoration: none; }
+header nav ul { display: flex; flex-wrap: wrap; gap: 1rem; list-style: none; margin: 0; padding: 0; }
+header nav li a { color: var(--texto); text-decoration: none; padding: 0.25rem 0; }
+header nav li a[aria-current="page"] { border-bottom: 2px solid var(--destaque); font-weight: 600; }
+
+.botao { display: inline-block; padding: 0.5rem 0.9rem; border: 1px solid var(--destaque); border-radius: 0.5rem; background: var(--destaque); color: var(--fundo); text-decoration: none; font: inherit; cursor: pointer; }
+main a.botao { color: var(--fundo); }
+.botao:hover { opacity: 0.85; background: var(--destaque); color: var(--fundo); }
+
+.aviso { margin: 1rem 0; padding: 0.6rem 1rem; background: var(--cartao); border-left: 4px solid var(--destaque); border-radius: 0.5rem; }
+.destaque-texto { font-size: 1.2rem; font-weight: 600; color: var(--destaque); }
+
+.tabela-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--linha); }
+th { color: var(--destaque); }
+
+.equipa { display: flex; flex-wrap: wrap; gap: 1.5rem; list-style: none; margin: 0; padding: 0; }
+.equipa li { text-align: center; }
+.equipa img { display: block; margin: 0 auto 0.5rem; border-radius: 50%; }
+
+textarea { width: 100%; font: inherit; padding: 0.5rem 0.7rem; border: 1px solid var(--linha); border-radius: 0.5rem; background: var(--cartao); color: var(--texto); }
+form label { display: block; }
+.rodape { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1.5rem; padding: 1.5rem 1.25rem; border-top: 1px solid var(--linha); background: var(--cartao); }
+.rodape h3 { margin: 0 0 0.25rem; }
+.rodape p { margin: 0; }
+#mensagem-contacto { min-height: 1.5rem; color: var(--sucesso); }

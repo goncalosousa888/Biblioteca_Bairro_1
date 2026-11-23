@@ -42,9 +42,9 @@ function aplicarTema(escuro) {
 
 function iniciarTema() {
   const botao = document.querySelector("#tema");
+  aplicarTema(localStorage.getItem("tema") === "escuro");
   if (botao === null) return;
 
-  aplicarTema(localStorage.getItem("tema") === "escuro");
   botao.addEventListener("click", () => {
     const escuro = !document.body.classList.contains("escuro");
     aplicarTema(escuro);
@@ -223,9 +223,30 @@ function iniciarFormulario() {
   });
 }
 
+// ── Formulário de contactos (contactos.html) ─────────────────────────────────
+function iniciarContacto() {
+  const form = document.querySelector("#form-contacto");
+  const mensagem = document.querySelector("#mensagem-contacto");
+  if (form === null) return;
+
+  form.addEventListener("submit", evento => {
+    evento.preventDefault();               // não enviar nem recarregar a página
+    const nome = form.elements.nome.value.trim();
+    if (nome === "" || !emailValido(form.elements.email.value.trim())) {
+      mensagem.textContent = "Preencha o nome e um e-mail válido.";
+      mensagem.style.color = "var(--erro)";
+      return;
+    }
+    mensagem.textContent = `Obrigado, ${nome}! Mensagem recebida.`;
+    mensagem.style.color = "";
+    form.reset();
+  });
+}
+
 // ── Arranque ─────────────────────────────────────────────────────────────────
 iniciarTema();
 mostrarEstado();
+iniciarContacto();
 
 if (document.querySelector("#lista-livros") !== null) {
   iniciarPesquisa();
