@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca do Bairro</title>
+    <style>
+        :root { --cor-destaque: #2952CC; }
+        body { --fundo: #FFF8F0; --texto: #23395B; --cartao: #ffffff; --linha: #23395B26; --suave: #23395B99; }
+        body.escuro { --fundo: #14161C; --texto: #F2EDE4; --cartao: #1f232c; --linha: #F2EDE426; --suave: #F2EDE499; }
+
+        * { box-sizing: border-box; }
+        body { margin: 0; background: var(--fundo); color: var(--texto); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; line-height: 1.55; transition: background .2s, color .2s; }
+        a { color: var(--cor-destaque); }
+        h1, h2, h3 { line-height: 1.2; margin: 0 0 .5rem; }
+        [hidden] { display: none !important; }
+        .container { width: min(1000px, 100% - 2rem); margin-inline: auto; }
+
+        button, input, select, textarea { font: inherit; color: inherit; }
+        button { cursor: pointer; border: 1px solid var(--linha); background: var(--cartao); border-radius: 8px; padding: .4rem .8rem; }
+        button:hover:not(:disabled) { border-color: var(--cor-destaque); }
+        button:disabled { opacity: .55; cursor: not-allowed; }
+        button.primario { background: var(--cor-destaque); border-color: var(--cor-destaque); color: #fff; }
+        input[type=text], input[type=email], select, textarea { width: 100%; padding: .5rem .7rem; border: 1px solid var(--linha); border-radius: 8px; background: var(--cartao); }
+        :focus-visible { outline: 3px solid var(--cor-destaque); outline-offset: 2px; }
+        label { font-weight: 600; font-size: .92rem; }
+
+        /* Cabeçalho */
+        .topo { position: sticky; top: 0; z-index: 10; background: var(--fundo); border-bottom: 1px solid var(--linha); }
+        .topo .container { display: flex; align-items: center; gap: .6rem; padding: .7rem 0; flex-wrap: wrap; }
+        .marca { font-size: 1.25rem; font-weight: 800; margin: 0 auto 0 0; color: var(--cor-destaque); }
+        #menu { display: none; width: 100%; }
+        #menu.aberto { display: block; }
+        #menu ul { list-style: none; margin: 0; padding: .5rem 0; display: flex; gap: 1.2rem; flex-wrap: wrap; }
+        #menu a { text-decoration: none; font-weight: 600; }
+
+        /* Secções */
+        main section { padding: 2.2rem 0; border-bottom: 1px solid var(--linha); }
+        main section:last-child { border-bottom: 0; }
+        .sub { color: var(--suave); margin: 0 0 1.2rem; }
+
+        /* Destaque */
+        .hero { display: grid; grid-template-columns: 150px 1fr; gap: 1.5rem; align-items: center; background: var(--cartao); border: 1px solid var(--linha); border-radius: 14px; padding: 1.5rem; }
+        .hero .capa { width: 150px; height: auto; border-radius: 8px; box-shadow: 0 6px 18px #0003; }
+        .etiqueta { display: inline-block; font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--cor-destaque); font-weight: 700; }
+        .hero-acoes { display: flex; gap: .6rem; align-items: center; flex-wrap: wrap; margin-top: .8rem; }
+
+        /* Catálogo */
+        .barra { display: grid; grid-template-columns: 1fr auto; gap: .8rem; align-items: end; margin-bottom: .5rem; }
+        #total, #estado { margin: .2rem 0; color: var(--suave); font-size: .92rem; }
+        #catalogo { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 1rem; }
+        .livro { background: var(--cartao); border: 1px solid var(--linha); border-radius: 12px; padding: .9rem; display: flex; flex-direction: column; gap: .3rem; }
+        .livro .capa { width: 100%; height: auto; border-radius: 6px; }
+        .livro .titulo { font-size: 1.05rem; margin-top: .4rem; }
+        .livro .autor { margin: 0; color: var(--suave); font-size: .9rem; }
+        .livro.emprestado .capa { filter: grayscale(.8); }
+        .badge { align-self: flex-start; font-size: .75rem; font-weight: 700; color: #fff; background: #B91C1C; border-radius: 99px; padding: .05rem .6rem; }
+        .acoes { display: flex; gap: .4rem; margin-top: auto; padding-top: .5rem; flex-wrap: wrap; }
+        .acoes button { font-size: .85rem; padding: .3rem .6rem; }
+
+        /* Eventos */
+        .eventos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+        .evento { background: var(--cartao); border: 1px solid var(--linha); border-radius: 12px; padding: 1rem 1.2rem; }
+        .evento p { margin: 0; }
+
+        /* Lista de leitura */
+        .linha-form { display: flex; gap: .5rem; flex-wrap: wrap; }
+        .linha-form input { flex: 1 1 220px; width: auto; }
+        #leitura { list-style: none; padding: 0; margin: 1rem 0 0; }
+        #leitura li { display: flex; align-items: center; gap: .4rem; padding: .5rem .6rem; border: 1px solid var(--linha); border-radius: 8px; background: var(--cartao); margin-bottom: .4rem; }
+        #leitura .titulo-leitura { flex: 1; cursor: pointer; }
+        #leitura li.lido .titulo-leitura { text-decoration: line-through; opacity: .55; }
+        #leitura button { padding: .15rem .55rem; }
+        #contador-leitura { color: var(--suave); margin: .6rem 0 0; }
+
+        /* Progresso */
+        .progresso-caixa { background: var(--linha); border-radius: 99px; height: 14px; overflow: hidden; margin: .6rem 0; }
+        .progresso { background: var(--cor-destaque); height: 100%; width: 0; transition: width .15s; }
+        .progresso.completo { background: #15803d; }
+        input[type=range] { width: 100%; accent-color: var(--cor-destaque); }
+        .tema-cor { display: flex; align-items: center; gap: .6rem; margin-top: 1rem; }
+
+        /* Formulários */
+        .duas-colunas { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .campo { margin-bottom: .8rem; }
+        .campo label { display: block; margin-bottom: .2rem; }
+        .check { display: flex; gap: .5rem; align-items: center; font-weight: 400; }
+        .check input { width: auto; }
+        input:user-invalid { border-color: #B91C1C; }
+        #contador-sugestao { font-size: .85rem; color: var(--suave); float: right; }
+        #contador-sugestao.perigo { color: #B91C1C; font-weight: 700; }
+        #resumo { margin-top: .8rem; font-weight: 600; color: #15803d; }
+
+        footer { text-align: center; padding: 2rem 0; color: var(--suave); font-size: .9rem; }
+
+        @media (max-width: 700px) {
+            .hero { grid-template-columns: 1fr; text-align: center; justify-items: center; }
+            .duas-colunas { grid-template-columns: 1fr; }
+            .barra { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="topo">
+        <div class="container">
+            <h1 class="marca">Biblioteca do Bairro</h1>
+            <button id="abrir-menu" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+            <button id="tema" type="button" aria-pressed="false">Modo escuro</button>
+            <nav id="menu" aria-label="Principal">
+                <ul>
+                    <li><a href="#destaque">Livro do mês</a></li>
+                    <li><a href="#catalogo-sec">Catálogo</a></li>
+                    <li><a href="#eventos">Eventos</a></li>
+                    <li><a href="#leitura-sec">A minha lista</a></li>
+                    <li><a href="#inscricao-sec">Clubes de leitura</a></li>
+                    <li><a href="#sugestoes">Sugestões</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- Livro em destaque -->
+        <section id="destaque" aria-labelledby="titulo-destaque">
+            <article class="hero" data-estado="">
+                <img class="capa" src="" alt="" width="150" height="212">
+                <div>
+                    <span class="etiqueta">Livro do mês</span>
+                    <h2 id="titulo-destaque">A carregar…</h2>
+                    <p class="autor-destaque sub"></p>
+                    <p class="estado-destaque"></p>
+                    <div class="hero-acoes">
+                        <button class="reservar primario" type="button">Reservar</button>
+                        <a class="mais" href="#catalogo-sec">Ver mais do autor</a>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Catálogo -->
+        <section id="catalogo-sec" aria-labelledby="titulo-catalogo">
+            <h2 id="titulo-catalogo">Catálogo</h2>
+            <p class="sub">Procura por título ou autor. Carrega em Esc para limpar a pesquisa.</p>
+            <div class="barra">
+                <div>
+                    <label for="pesquisa">Pesquisar livros</label>
+                    <input type="text" id="pesquisa" name="q" autocomplete="off" placeholder="Ex.: Saramago">
+                </div>
+                <p id="total"></p>
+            </div>
+            <p id="estado" role="status"></p>
+            <ul id="catalogo"></ul>
+
+            <template id="tpl-livro">
+                <li class="livro">
+                    <img class="capa" src="" alt="" width="160" height="226">
+                    <span class="badge" hidden>Emprestado</span>
+                    <h3 class="titulo"></h3>
+                    <p class="autor"></p>
+                    <div class="acoes">
+                        <button type="button" class="reservar" data-acao="reservar">Reservar</button>
+                        <button type="button" data-acao="lista">+ Lista</button>
+                    </div>
+                </li>
+            </template>
+        </section>
+
+        <!-- Eventos -->
+        <section id="eventos" aria-labelledby="titulo-eventos">
+            <h2 id="titulo-eventos">Eventos</h2>
+            <div class="eventos">
+                <article class="evento">
+                    <h3>Hora do conto</h3>
+                    <p>Sábado, <strong>11h</strong></p>
+                </article>
+                <article class="evento">
+                    <h3>Clube de leitura</h3>
+                    <p>Quinta-feira, <strong>18h30</strong></p>
+                </article>
+                <article class="evento">
+                    <h3>Oficina de poesia</h3>
+                    <p>Domingo, <strong>15h</strong></p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Lista de leitura + progresso -->
+        <section id="leitura-sec" aria-labelledby="titulo-leitura">
+            <h2 id="titulo-leitura">A minha lista de leitura</h2>
+            <p class="sub">Clica no título para marcar como lido. Usa ↑ e ↓ para reordenar.</p>
+            <div class="linha-form">
+                <label for="campo-leitura" class="sr" hidden>Livro a adicionar</label>
+                <input type="text" id="campo-leitura" placeholder="Título do livro" autocomplete="off">
+                <button type="button" id="adicionar" class="primario">Adicionar</button>
+                <button type="button" id="limpar">Limpar tudo</button>
+            </div>
+            <p id="contador-leitura" role="status">0 livros</p>
+            <ul id="leitura"></ul>
+
+            <h3 style="margin-top:2rem">Progresso do livro atual</h3>
+            <label for="lido">Quanto já leste?</label>
+            <input type="range" id="lido" min="0" max="100" value="0">
+            <div class="progresso-caixa"><div class="progresso"></div></div>
+            <p id="percentagem">0% lido</p>
+            <div class="tema-cor">
+                <label for="cor">Cor do site</label>
+                <input type="color" id="cor" value="#2952CC">
+            </div>
+        </section>
+
+        <!-- Inscrição e sugestões -->
+        <section id="inscricao-sec" aria-labelledby="titulo-inscricao">
+            <div class="duas-colunas">
+                <div id="sugestoes">
+                    <h2 id="titulo-inscricao">Clubes de leitura</h2>
+                    <p class="sub">Inscreve-te num clube. Precisamos do teu nome completo.</p>
+                    <form id="form-inscricao">
+                        <div class="campo">
+                            <label for="nome">Nome</label>
+                            <input type="text" id="nome" name="nome" required autocomplete="name">
+                        </div>
+                        <div class="campo">
+                            <label for="email">E-mail</label>
+                            <input type="email" id="email" name="email" required autocomplete="email">
+                        </div>
+                        <div class="campo">
+                            <label for="clube">Clube</label>
+                            <select id="clube" name="clube">
+                                <option>Policiais</option>
+                                <option>Poesia</option>
+                                <option>Ficção Científica</option>
+                            </select>
+                        </div>
+                        <div class="campo">
+                            <label class="check"><input type="checkbox" name="regras" required> Aceito as regras da biblioteca</label>
+                        </div>
+                        <button type="submit" class="primario">Inscrever</button>
+                    </form>
+                    <p id="resumo" role="status"></p>
+                </div>
+
+                <div>
+                    <h2>Sugere um livro</h2>
+                    <p class="sub">Diz-nos o que gostavas de ver nas estantes (máx. 200 caracteres).</p>
+                    <div class="campo">
+                        <label for="sugestao">A tua sugestão <span id="contador-sugestao">0/200</span></label>
+                        <textarea id="sugestao" rows="5" maxlength="200"></textarea>
+                    </div>
+                    <p id="eco-sugestao" class="sub" role="status"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">Biblioteca do Bairro · Aberta de segunda a sábado</div>
+    </footer>
+
+    <script>
+        /* ========== Dados ========== */
+        const livros = [
+            { titulo: "Os Maias", autor: "Eça de Queirós", ano: 1888, emprestado: false },
+            { titulo: "Mensagem", autor: "Fernando Pessoa", ano: 1934, emprestado: true, devolucao: "2026-12-03" },
+            { titulo: "O Principezinho", autor: "Antoine de Saint-Exupéry", ano: 1943, emprestado: false },
+            { titulo: "Memorial do Convento", autor: "José Saramago", ano: 1982, emprestado: false },
+            { titulo: "Ensaio sobre a Cegueira", autor: "José Saramago", ano: 1995, emprestado: true, devolucao: "2026-12-10" }
+        ];
+        const cores = ["#2952CC", "#A84B33", "#15803d", "#7c3aed", "#b45309"];
+
+        /* ========== Utilitários ========== */
+        function escaparXml(t) {
+            return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+        // Capa gerada em SVG (não há ficheiros de imagem)
+        function criarCapa(titulo, indice) {
+            const palavras = titulo.split(" ");
+            const linhas = [];
+            let atual = "";
+            for (const p of palavras) {
+                if ((atual + " " + p).trim().length > 12) { linhas.push(atual); atual = p; }
+                else atual = (atual + " " + p).trim();
+            }
+            if (atual) linhas.push(atual);
+            const texto = linhas.map((l, i) =>
+                `<text x="80" y="${100 + i * 24}" text-anchor="middle" font-family="Georgia,serif" font-size="18" fill="#fff">${escaparXml(l)}</text>`
+            ).join("");
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="160" height="226" viewBox="0 0 160 226">` +
+                `<rect width="160" height="226" fill="${cores[indice % cores.length]}"/>` +
+                `<rect x="10" y="10" width="140" height="206" fill="none" stroke="#fff" stroke-opacity=".5"/>` +
+                texto + `</svg>`;
+            return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+        }
+        function formatarData(iso) {
+            const [, mes, dia] = iso.split("-");
+            return `${dia}/${mes}`;
+        }
+
+        /* ========== Menu e modo escuro ========== */
+        const botaoMenu = document.querySelector("#abrir-menu");
+        const menu = document.querySelector("#menu");
+        const botaoTema = document.querySelector("#tema");
+
+        function definirMenu(aberto) {
+            menu.classList.toggle("aberto", aberto);
+            botaoMenu.setAttribute("aria-expanded", aberto);
+        }
+        botaoMenu.addEventListener("click", () => {
+            definirMenu(!menu.classList.contains("aberto"));
+        });
+        menu.addEventListener("click", (evento) => {
+            if (evento.target.closest("a")) definirMenu(false);
+        });
+        document.addEventListener("keydown", (evento) => {
+            if (evento.key === "Escape") definirMenu(false);
+        });
+        botaoTema.addEventListener("click", () => {
+            const escuro = document.body.classList.toggle("escuro");
+            botaoTema.setAttribute("aria-pressed", escuro);
+            botaoTema.textContent = escuro ? "Modo claro" : "Modo escuro";
+        });
+
+        /* ========== Catálogo (a partir do array, com <template>) ========== */
+        const tpl = document.querySelector("#tpl-livro");
+        const catalogo = document.querySelector("#catalogo");
+        const campoPesquisa = document.querySelector("#pesquisa");
+        const estadoPesquisa = document.querySelector("#estado");
+
+        livros.forEach((livro, i) => {
+            const item = tpl.content.cloneNode(true);
+            const li = item.querySelector(".livro");
+            const capa = item.querySelector(".capa");
+            capa.src = criarCapa(livro.titulo, i);
+            capa.alt = `Capa de ${livro.titulo}, de ${livro.autor}`;
+            item.querySelector(".titulo").textContent = livro.titulo;
+            item.querySelector(".autor").textContent = `${livro.autor}, ${livro.ano}`;
+            li.dataset.id = i;
+            li.dataset.estado = livro.emprestado ? "emprestado" : "disponivel";
+            li.dataset.pesquisa = `${livro.titulo} ${livro.autor}`.toLowerCase();
+
+            const reservar = item.querySelector(".reservar");
+            if (livro.emprestado) {
+                li.classList.add("emprestado");
+                item.querySelector(".badge").hidden = false;
+                reservar.textContent = `Disponível a ${formatarData(livro.devolucao)}`;
+                reservar.disabled = true;
+            }
+            catalogo.append(item);
+        });
+        document.querySelector("#total").textContent = `${livros.length} livros`;
+
+        const itensCatalogo = [...catalogo.querySelectorAll(".livro")];
+
+        function filtrar() {
+            const termo = campoPesquisa.value.trim().toLowerCase();
+            let visiveis = 0;
+            for (const li of itensCatalogo) {
+                const corresponde = li.dataset.pesquisa.includes(termo);
+                li.hidden = !corresponde;
+                if (corresponde) visiveis++;
+            }
+            estadoPesquisa.textContent = termo
+                ? `${visiveis} ${visiveis === 1 ? "livro encontrado" : "livros encontrados"}`
+                : "";
+        }
+        campoPesquisa.addEventListener("input", filtrar);
+        campoPesquisa.addEventListener("keydown", (evento) => {
+            if (evento.key !== "Escape") return;
+            campoPesquisa.value = "";
+            filtrar();
+        });
+
+        // Um só ouvinte para todos os botões do catálogo
+        catalogo.addEventListener("click", (evento) => {
+            const botao = evento.target.closest("button");
+            if (!botao) return;
+            const li = botao.closest(".livro");
+            const livro = livros[Number(li.dataset.id)];
+            if (botao.dataset.acao === "reservar") {
+                botao.textContent = "Reservado";
+                botao.disabled = true;
+                estadoPesquisa.textContent = `«${livro.titulo}» reservado.`;
+            }
+            if (botao.dataset.acao === "lista") {
+                adicionarLivro(livro.titulo);
+                estadoPesquisa.textContent = `«${livro.titulo}» adicionado à tua lista.`;
+            }
+        });
+
+        /* ========== Livro do mês ========== */
+        const destaque = document.querySelector("#destaque .hero");
+        const livroMes = livros[1]; // Mensagem
+        destaque.dataset.estado = livroMes.emprestado ? "emprestado" : "disponivel";
+        destaque.querySelector("h2").textContent = livroMes.titulo;
+        destaque.querySelector(".autor-destaque").textContent = `${livroMes.autor}, ${livroMes.ano}`;
+        const capaDestaque = destaque.querySelector(".capa");
+        capaDestaque.src = criarCapa(livroMes.titulo, 1);
+        capaDestaque.alt = `Capa de ${livroMes.titulo}, de ${livroMes.autor}`;
+        destaque.querySelector(".estado-destaque").textContent = `Estado: ${destaque.dataset.estado}`;
+
+        const botaoDestaque = destaque.querySelector(".reservar");
+        if (destaque.dataset.estado === "emprestado") {
+            botaoDestaque.textContent = `Disponível a ${formatarData(livroMes.devolucao)}`;
+            botaoDestaque.disabled = true;
+        }
+        destaque.querySelector(".mais").addEventListener("click", () => {
+            campoPesquisa.value = livroMes.autor.split(" ").pop();
+            filtrar();
+        });
+
+        /* ========== Lista de leitura (delegação) ========== */
+        const listaLeitura = document.querySelector("#leitura");
+        const campoLeitura = document.querySelector("#campo-leitura");
+        const contadorLeitura = document.querySelector("#contador-leitura");
+
+        function contarLeitura() {
+            const n = listaLeitura.children.length;
+            contadorLeitura.textContent = `${n} ${n === 1 ? "livro" : "livros"}`;
+        }
+        function criarBotao(texto, acao, rotulo) {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.textContent = texto;
+            b.dataset.acao = acao;
+            b.setAttribute("aria-label", rotulo);
+            return b;
+        }
+        function adicionarLivro(titulo) {
+            const li = document.createElement("li");
+            const span = document.createElement("span");
+            span.className = "titulo-leitura";
+            span.textContent = titulo;
+            li.append(
+                span,
+                criarBotao("↑", "subir", `Subir ${titulo}`),
+                criarBotao("↓", "descer", `Descer ${titulo}`),
+                criarBotao("Remover", "remover", `Remover ${titulo}`)
+            );
+            listaLeitura.append(li);
+            contarLeitura();
+        }
+        function adicionarDoCampo() {
+            const titulo = campoLeitura.value.trim();
+            if (!titulo) { campoLeitura.focus(); return; }
+            adicionarLivro(titulo);
+            campoLeitura.value = "";
+            campoLeitura.focus();
+        }
+        document.querySelector("#adicionar").addEventListener("click", adicionarDoCampo);
+        campoLeitura.addEventListener("keydown", (evento) => {
+            if (evento.key === "Enter") adicionarDoCampo();
+        });
+        document.querySelector("#limpar").addEventListener("click", () => {
+            listaLeitura.replaceChildren();
+            contarLeitura();
+            campoLeitura.focus();
+        });
+        listaLeitura.addEventListener("click", (evento) => {
+            const li = evento.target.closest("li");
+            if (!li) return;
+            const botao = evento.target.closest("button");
+            if (!botao) {
+                li.classList.toggle("lido");
+                return;
+            }
+            const acao = botao.dataset.acao;
+            if (acao === "remover") {
+                li.remove();
+                campoLeitura.focus();
+            }
+            if (acao === "subir") li.previousElementSibling?.before(li);
+            if (acao === "descer") li.nextElementSibling?.after(li);
+            contarLeitura();
+        });
+        ["Os Maias", "Memorial do Convento"].forEach(adicionarLivro);
+
+        /* ========== Progresso de leitura e cor do site ========== */
+        const range = document.querySelector("#lido");
+        const barra = document.querySelector(".progresso");
+        const textoProgresso = document.querySelector("#percentagem");
+        range.addEventListener("input", () => {
+            const valor = Number(range.value);
+            barra.style.width = `${valor}%`;
+            textoProgresso.textContent = `${valor}% lido`;
+            barra.classList.toggle("completo", valor === 100);
+        });
+        document.querySelector("#cor").addEventListener("input", (evento) => {
+            document.documentElement.style.setProperty("--cor-destaque", evento.target.value);
+        });
+
+        /* ========== Sugestões ========== */
+        const sugestao = document.querySelector("#sugestao");
+        const contadorSugestao = document.querySelector("#contador-sugestao");
+        sugestao.addEventListener("input", () => {
+            const n = sugestao.value.length;
+            contadorSugestao.textContent = `${n}/200`;
+            contadorSugestao.classList.toggle("perigo", n > 180);
+        });
+
+        /* ========== Inscrição no clube ========== */
+        const form = document.querySelector("#form-inscricao");
+        const resumo = document.querySelector("#resumo");
+        const campoNome = form.elements.nome;
+        const MSG_NOME = "Escreve nome e apelido.";
+
+        function validarNome() {
+            const partes = campoNome.value.trim().split(/\s+/).filter(Boolean);
+            campoNome.setCustomValidity(partes.length < 2 ? MSG_NOME : "");
+        }
+        campoNome.addEventListener("input", validarNome);
+        validarNome();
+
+        form.addEventListener("submit", (evento) => {
+            evento.preventDefault();
+            const dados = new FormData(form);
+            const primeiro = dados.get("nome").trim().split(/\s+/)[0];
+            const clube = dados.get("clube");
+            resumo.textContent = `Obrigado, ${primeiro}! Inscrição no clube ${clube}.`;
+            form.reset();
+            validarNome();
+            campoNome.focus();
+        });
+    </script>
+</body>
+</html>
